@@ -23,7 +23,7 @@ Some common Slurm commands are summarized in the table below. More complete exam
 
 
 | Command      | Action/Task                                    | LSF Equivalent                     |
-|:---          | :----------                                    | :---------:                        |
+|:-------:     | :----------:                                   | :-------------:                    |
 | ``squeue``   | Show the current queue                         | ``bjobs``                          |
 | ``sbatch``   | Submit a batch script                          | ``bsub``                           |
 | ``salloc``   | Submit an interactive job                      | ``bsub -Is $SHELL``                |
