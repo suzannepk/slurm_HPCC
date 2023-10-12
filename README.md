@@ -27,14 +27,49 @@ Some common Slurm commands are summarized in the table below. More complete exam
 | ``scancel``  | Cancel a job or job step                       | ``bkill``                          |
 | ``scontrol`` | View or modify job configuration.              | ``bstop``, ``bresume``, ``bmod``   |
 
-This challegne will guide your through using ``sbatch``,  ``srun`` and ``squeue``. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduer to manage the workload since we all need to share a limit nubmer of nodes for the crash course.  Let's start by learning what is needed for a batch script. 
+This challegne will guide your through using ``sbatch``,  ``srun`` and ``squeue``. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduer to manage the workload since we all need to share a limit nubmer of nodes for the crash course.  Let's start by first setting up our test code and then learning how to run it with a batch script.  
+
+Compiling the test code
+-----------------------
+We will use a code called `hello_mpi_omp` writen by Tom Papatheodore as our test example. This code's output will display where each process runs on the compute node in its output. To start we will just see how to run it with a batch script. 
+
+To begin, make sure you are in the directory for the challenge by doing 
+
+```
+cd ~/hands-on-with-Frontier-/challenges/Srun
+
+```
+
+Do ``ls`` to verify that you see `hello_mpi_omp.c`, `makefile` and `submit.sl’ listed. 
+
+If you like, you may look at the code by doing 
+```
+vi hello_mpi-omp.c
+
+```
+But you may not understand what it is doing until you have done the MPI and OpenMP challenges. 
+
+To close the file from vi do "esc". ":q". 
+
+
+We will use a makefile, which is a file that specifies how to compile the program. If you are curious you may view the makefile by doing `` vi makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
+
+We will use the default programming environment on Frontier to compile this code, which means using the Cray programming environment and Cray-mpich for MPI. On Frontier these are set up when you login. If running this tutorial on other machines, you would need to use their documentation to learn how to setup a programming environment to support MPI and OpenMP.
+
+To use the makefile to compile the code on Frontier, do:
+```
+make
+```
+If all goes right, you will see that this produces an executable file called `hello_mpi_omp`. You may use `ls` to verify that the file is present. If you don't see it retrace your steps to find what you missed. You may also ask an instructor. 
+
+Now that we have an executable to run, lets use a batch script to run it! 
 
 Batch Scripts
 -------------
 
 The most common way to interact with the batch system is via batch scripts. A batch script is simply a shell script with added directives to request various resoruces from or provide certain information to the scheduling system.  Aside from these directives, the batch script is simply the series of commands needed to set up and run your job.
 
-To submit a batch script, use the command ``sbatch myjob.sl``
+To submit a batch script, use the command ``sbatch submit.sl``
 
 Consider the following batch script:
 
@@ -44,9 +79,9 @@ Consider the following batch script:
     #SBATCH -A ABC123
     #SBATCH -J RunSim123
     #SBATCH -o %x-%j.out
-    #SBATCH -t 1:00:00
+    #SBATCH -t 10:00
     #SBATCH -p batch
-    #SBATCH -N 1024
+    #SBATCH -N 1
 
     cd $MEMBERWORK/abc123/Run.456
     cp $PROJWORK/abc123/RunData/Input.456 ./Input.456
@@ -59,12 +94,12 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 
 
 | Line | Description                                                                                     |
-| :--: | :----------                                                                                  |
+| :--: | :----------                                                                                     |
 |    1 | Shell interpreter line                                                                          |
 |    2 | OLCF project to charge                                                                          |
 |    3 | Job name                                                                                        |
 |    4 | Job standard output file (``%x`` will be replaced with the job name and ``%j`` with the Job ID) |
-|    5 | Walltime requested (in ``HH:MM:SS`` format). See the table below for other formats.             |
+|    5 | Walltime requested (in ``MM:SS`` format). See the table below for other formats.                |
 |    6 | Partition (queue) to use                                                                        |
 |    7 | Number of compute nodes requested                                                               |
 |    8 | Blank line                                                                                      |
@@ -73,38 +108,26 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |   11 | Run the job ( add layout details )                                                              |
 |   12 | Copy the output file to an appropriate location.                                                |
 
+We will modify a simple batch script now to give you practice. Note in the simple script we will be running from, and writing to, the same directory that we submit the batch script from, so we will not need to have lines 9, 10 and 12, but those will be useful for you if you ever need to target your codes' reads and writes to the parallel filesystem’s directories in the future.
 
+Open the batch script with Vi (or your favored text editor). To use Vi do the following:
 
+```
+vi submit.sl
 
-Interactive Jobs
-----------------
+```
+Use "esc", ":i" to put vi in insert mode, use the explainations in the example above to make the following modififcations to the batch script. 
+1. Change the project to the project ID for this tutorial.
+2. Customize your job's name
+3. Change the time from 10 minutes to 8 minutes.
 
-Most users will find batch jobs an easy way to use the system, as they allow you to "hand off" a job to the scheduler, allowing them to focus on other tasks while their job waits in the queue and eventually runs. Occasionally, it is necessary to run interactively, especially when developing, testing, modifying or debugging a code.
+Submit the batch script to run by doing 
 
-Since all compute resources are managed and scheduled by Slurm, it is not possible to simply log into the system and immediately begin running parallel codes interactively. Rather, you must request the appropriate resources from Slurm and, if necessary, wait for them to become available. This is done through an "interactive batch" job. Interactive batch jobs are submitted with the ``salloc`` command. Resources are requested via the same options that are passed via ``#SBATCH`` in a regular batch script (but without the ``#SBATCH`` prefix). For example, to request an interactive batch job with the same resources that the batch script above requests, you would use ``salloc -A ABC123 -J RunSim123 -t 1:00:00 -p batch -N 1024``. Note there is no option for an output file...you are running interactively, so standard output and standard error will be displayed to the terminal.
+```
+sbatch submit.sl
 
-.. _common-slurm-options:
+```
 
-Common Slurm Options
---------------------
-
-The table below summarizes options for submitted jobs. Unless otherwise noted, they can be used for either batch scripts or interactive batch jobs. For scripts, they can be added on the ``sbatch`` command line or as a ``#BSUB`` directive in the batch script. (If they're specified in both places, the command line takes precedence.) This is only a subset of all available options. Check the `Slurm Man Pages <https://slurm.schedmd.com/man_index.html>`__ for a more complete list.
-
-
-| Option                 | Example Usage                              | Description                                                                          |
-|:------                 |:--------------                             |:-----------                                                                          |          
-| ``-A``                 | ``#SBATCH -A ABC123``                      | Specifies the project to which the job should be charged                             |
-| ``-N``                 | ``#SBATCH -N 1024``                        | Request 1024 nodes for the job                                                       |
-| ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours. <br> Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds <br> days-hours, days-hours:minutes, or days-hours:minutes:seconds |                                  
-| ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | Number of active hardware threads per core. Can be 1 or 2 (1 is default)<br> **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.|
-| ``-J``                 | ``#SBATCH -J MyJob123``                    | Specify the job name (this will show up in queue listings)                           |
-| ``-o``                 | ``#SBATCH -o jobout.%j``                   | File where job STDOUT will be directed (%j will be replaced with the job ID).        |
-|                        |                                            | If no `-e` option is specified, job STDERR will be placed in this file, too.         |
-| ``-e``                 | ``#SBATCH -e joberr.%j``                   | File where job STDERR will be directed (%j will be replaced with the job ID).        |
-|                        |                                            | If no `-o` option is specified, job STDOUT will be placed in this file, too.         |
-| ``--mail-type``        | ``#SBATCH --mail-type=END``                | Send email for certain job actions. Can be a comma-separated list. Actions include <br>  BEGIN, END, FAIL, REQUEUE, INVALID_DEPEND, STAGE_OUT, ALL, and more.|
-| ``--mail-user``        | ``#SBATCH --mail-user=user@somewhere.com`` | Email address to be used for notifications.                                          |
-| ``--reservation``      | ``#SBATCH --reservation=MyReservation.1``  | Instructs Slurm to run a job on nodes that are part of the specified reservation.    |
 
 
 To see what state your job is in use 
@@ -147,6 +170,43 @@ In addition to state codes, jobs that are pending will have a "reason code" to e
 | ReqNodeNotAvail   | The requested a particular node, but it's currently unavailable (it's in use, reserved, down, draining, etc.) |
 | JobLaunchFailure  | Job failed to launch (could due to system problems, invalid program name, etc.)                               |
 | NonZeroExitCode   | The job exited with some code other than 0                                                                    |
+
+
+Did you see that your job was queued and why it was not running yet? Its possible, that your job would have run before you could see your query 
+
+When your job is done `ls` will show an output file in your working directory. 
+
+
+
+
+
+
+
+
+
+
+
+Use
+Common Slurm Options
+--------------------
+
+The table below summarizes options for submitted jobs. Unless otherwise noted, they can be used for either batch scripts or interactive batch jobs. For scripts, they can be added on the ``sbatch`` command line or as a ``#BSUB`` directive in the batch script. (If they're specified in both places, the command line takes precedence.) This is only a subset of all available options. Check the `Slurm Man Pages <https://slurm.schedmd.com/man_index.html>`__ for a more complete list.
+
+
+| Option                 | Example Usage                              | Description                                                                          |
+|:------                 |:--------------                             |:-----------                                                                          |          
+| ``-A``                 | ``#SBATCH -A ABC123``                      | Specifies the project to which the job should be charged                             |
+| ``-N``                 | ``#SBATCH -N 1024``                        | Request 1024 nodes for the job                                                       |
+| ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours. <br> Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds <br> days-hours, days-hours:minutes, or days-hours:minutes:seconds |                                  
+| ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | Number of active hardware threads per core. Can be 1 or 2 (1 is default)<br> **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.|
+| ``-J``                 | ``#SBATCH -J MyJob123``                    | Specify the job name (this will show up in queue listings)                           |
+| ``-o``                 | ``#SBATCH -o jobout.%j``                   | File where job STDOUT will be directed (%j will be replaced with the job ID).        |
+|                        |                                            | If no `-e` option is specified, job STDERR will be placed in this file, too.         |
+| ``-e``                 | ``#SBATCH -e joberr.%j``                   | File where job STDERR will be directed (%j will be replaced with the job ID).        |
+|                        |                                            | If no `-o` option is specified, job STDOUT will be placed in this file, too.         |
+| ``--mail-type``        | ``#SBATCH --mail-type=END``                | Send email for certain job actions. Can be a comma-separated list. Actions include <br>  BEGIN, END, FAIL, REQUEUE, INVALID_DEPEND, STAGE_OUT, ALL, and more.|
+| ``--mail-user``        | ``#SBATCH --mail-user=user@somewhere.com`` | Email address to be used for notifications.                                          |
+| ``--reservation``      | ``#SBATCH --reservation=MyReservation.1``  | Instructs Slurm to run a job on nodes that are part of the specified reservation.    |
 
 
 Many other states and job reason codes exist. For a more complete description, see the ``squeue`` man page (either on the system or online).
