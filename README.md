@@ -50,7 +50,7 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 
 
 | Line | Description                                                                                     |
-| :--: | :----------:                                                                                    |
+| :--: | :----------                                                                                  |
 |    1 | Shell interpreter line                                                                          |
 |    2 | OLCF project to charge                                                                          |
 |    3 | Job name                                                                                        |
