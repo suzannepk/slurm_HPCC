@@ -52,7 +52,7 @@ But you may not understand what it is doing until you have done the MPI and Open
 To close the file from vi do "esc". ":q". 
 
 
-We will use a makefile, which is a file that specifies how to compile the program. If you are curious you may view the makefile by doing `` vi makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
+We will use a makefile, which is a file that specifies how to compile the program. If you are curious you may view the makefile by doing `` vi Makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
 
 We will use the default programming environment on Frontier to compile this code, which means using the Cray programming environment and Cray-mpich for MPI. On Frontier these are set up when you login. If running this tutorial on other machines, you would need to use their documentation to learn how to setup a programming environment to support MPI and OpenMP.
 
@@ -110,7 +110,7 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 
 We will modify a simple batch script now to give you practice. Note in the simple script we will be running from, and writing to, the same directory that we submit the batch script from, so we will not need to have lines 9, 10 and 12, but those will be useful for you if you ever need to target your codes' reads and writes to the parallel filesystem’s directories in the future.
 
-Open the batch script with Vi (or your favored text editor). To use Vi do the following:
+Open the batch script with vi (or your favored text editor). To use Vi do the following:
 
 ```
 vi submit.sl
@@ -127,8 +127,6 @@ Submit the batch script to run by doing
 sbatch submit.sl
 
 ```
-
-
 
 To see what state your job is in use 
 ```
