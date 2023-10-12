@@ -86,11 +86,9 @@ The table below summarizes options for submitted jobs. Unless otherwise noted, t
 |:------                 |:--------------                             |:-----------                                                                          |          
 | ``-A``                 | ``#SBATCH -A ABC123``                      | Specifies the project to which the job should be charged                             |
 | ``-N``                 | ``#SBATCH -N 1024``                        | Request 1024 nodes for the job                                                       |
-| ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours.                                                       |
-|                        |                                            | Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds   |
-|                        |                                            | days-hours, days-hours:minutes, or days-hours:minutes:seconds                        |
-| ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | | Number of active hardware threads per core. Can be 1 or 2 (1 is default)           |
-|                        |                                            | | **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.       |
+| ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours. <br> Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds <br> days-hours, days-hours:minutes, or days-hours:minutes:seconds |                                  
+| ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | Number of active hardware threads per core. Can be 1 or 2 (1 is default)             |
+|                        |                                            | **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.         |
 | ``-J``                 | ``#SBATCH -J MyJob123``                    | Specify the job name (this will show up in queue listings)                           |
 | ``-o``                 | ``#SBATCH -o jobout.%j``                   | File where job STDOUT will be directed (%j will be replaced with the job ID).        |
 |                        |                                            | If no `-e` option is specified, job STDERR will be placed in this file, too.         |
