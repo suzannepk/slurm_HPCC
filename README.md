@@ -1,10 +1,12 @@
 Slurm
 -----
+
 Goals: 
-1.  Familiarize yourself with batch scripts
-2.  Understand how to modify and submit an existing batch script
-3.  Understand how to run a job with slurm
-4.  Explore job layout on the node.
+
+* Familiarize yourself with batch scripts
+* Understand how to modify and submit an existing batch script
+* Understand how to run a job with slurm
+* Explore job layout on the node.
 
 Frontier uses SchedMD's Slurm Workload Manager for scheduling and managing jobs. Slurm maintains similar functionality to other schedulers such as IBM's LSF, but provides unique control of Frontier's resources through custom commands and options specific to Slurm. A few important commands can be found in the conversion table below, but please visit SchedMD's `Rosetta Stone of Workload Managers <https://slurm.schedmd.com/rosetta.pdf>`__ for a more complete conversion reference. 
 
