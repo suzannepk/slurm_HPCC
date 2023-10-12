@@ -7,25 +7,31 @@ Slurm documentation for each command is available via the ``man`` utility, and o
 
 Some common Slurm commands are summarized in the table below. More complete examples are given in the Monitoring and Modifying Batch Jobs section of this guide.
 
-+--------------+------------------------------------------------+------------------------------------+
+| Rank  | Name             | Program                       | Accuracy | Speed   |
+| :---  | :---             | :---------:                   | :------: | :---:   |
+| 1.    | Mercy A.         | SIAM HPC-CC 2022              | 62.21%   | 652s    | 
+| 2.    | Justin B.        | Summer HPC-CC 2022            | 61.94%   | 804s    |
+| 3.    | Ahmedur S.       | SC HPC-CC 2022                | 60.35%   | 953s    |
+| 4.    | Madhu G.         | Summer HPC-CC 2022            | 63.86%   | 1191s   |
+| 5.    | Gavin S.         | Summer HPC-CC 2022            | 65.43%   | 1262s   |
+| 6.    | Johannes K.      | Summer HPC-CC 2022            | 65.71%   | 1389s   |
+| 7.    | Alessandro B.    | Summer HPC-CC 2022            | 62.71%   | 1659s   |
+| 8.    | Sola O.          | Summer HPC-CC 2022            | 64.87%   | 1704s   |
+| 9.    | Abigail W.       | Summer HPC-CC 2022            | 61.04%   | 2161s   |
+| 10.   | Moyi T.          | Summer HPC-CC 2022            | 62.33%   | 2164s   |
+
+
+
 | Command      | Action/Task                                    | LSF Equivalent                     |
-+==============+================================================+====================================+
+|:---          | :----------                                    | :---------:                        |
 | ``squeue``   | Show the current queue                         | ``bjobs``                          |
-+--------------+------------------------------------------------+------------------------------------+
 | ``sbatch``   | Submit a batch script                          | ``bsub``                           |
-+--------------+------------------------------------------------+------------------------------------+
 | ``salloc``   | Submit an interactive job                      | ``bsub -Is $SHELL``                |
-+--------------+------------------------------------------------+------------------------------------+
 | ``srun``     | Launch a parallel job                          | ``jsrun``                          |
-+--------------+------------------------------------------------+------------------------------------+
-| ``sinfo``    | Show node/partition info                       | ``bqueues`` or ``bhosts``          |
-+--------------+------------------------------------------------+------------------------------------+
 | ``sacct``    | View accounting information for jobs/job steps | ``bacct``                          |
-+--------------+------------------------------------------------+------------------------------------+
 | ``scancel``  | Cancel a job or job step                       | ``bkill``                          |
-+--------------+------------------------------------------------+------------------------------------+
 | ``scontrol`` | View or modify job configuration.              | ``bstop``, ``bresume``, ``bmod``   |
-+--------------+------------------------------------------------+------------------------------------+
+
 
 
 Batch Scripts
