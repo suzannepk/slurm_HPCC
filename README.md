@@ -1,5 +1,10 @@
 Slurm
 -----
+Goals: 
+1.  Familiarize yourself with batch scripts
+2.  Understand how to modify and submit an existing batch script
+3.  Understand how to run a job with slurm
+4.  Explore job layout on the node.
 
 Frontier uses SchedMD's Slurm Workload Manager for scheduling and managing jobs. Slurm maintains similar functionality to other schedulers such as IBM's LSF, but provides unique control of Frontier's resources through custom commands and options specific to Slurm. A few important commands can be found in the conversion table below, but please visit SchedMD's `Rosetta Stone of Workload Managers <https://slurm.schedmd.com/rosetta.pdf>`__ for a more complete conversion reference. 
 
@@ -98,52 +103,27 @@ The table below summarizes options for submitted jobs. Unless otherwise noted, t
 | ``--reservation``      | ``#SBATCH --reservation=MyReservation.1``  | Instructs Slurm to run a job on nodes that are part of the specified reservation.    |
 
 
+To see what state your job is in use 
+```
+squeue -u <your_user_id>
 
-Slurm Environment Variables
----------------------------
-
-Slurm reads a number of environment variables, many of which can provide the same information as the job options noted above. We recommend using the job options rather than environment variables to specify job options, as it allows you to have everything self-contained within the job submission script (rather than having to remember what options you set for a given job).
-
-Slurm also provides a number of environment variables within your running job. The following table summarizes those that may be particularly useful within your job (e.g. for naming output log files):
-
-+--------------------------+-----------------------------------------------------------------------------------------+
-| Variable                 | Description                                                                             |
-+==========================+=========================================================================================+
-| ``$SLURM_SUBMIT_DIR``    | The directory from which the batch job was submitted. By default, a new job starts      |
-|                          | in your home directory. You can get back to the directory of job submission with        |
-|                          | ``cd $SLURM_SUBMIT_DIR``. Note that this is not necessarily the same directory in which |
-|                          | the batch script resides.                                                               |
-+--------------------------+-----------------------------------------------------------------------------------------+
-| ``$SLURM_JOBID``         | The job’s full identifier. A common use for ``$SLURM_JOBID`` is to append the job’s ID  |
-|                          | to the standard output and error files.                                                 |
-+--------------------------+-----------------------------------------------------------------------------------------+
-| ``$SLURM_JOB_NUM_NODES`` | The number of nodes requested.                                                          |
-+--------------------------+-----------------------------------------------------------------------------------------+
-| ``$SLURM_JOB_NAME``      | The job name supplied by the user.                                                      |
-+--------------------------+-----------------------------------------------------------------------------------------+
-| ``$SLURM_NODELIST``      | The list of nodes assigned to the job.                                                  |
-+--------------------------+-----------------------------------------------------------------------------------------+
-
+````
+The sections below will help you understand how to read the output that is given. 
 
 Job States
 ----------
 
 A job will transition through several states during its lifetime. Common ones include:
 
-+-------+------------+-------------------------------------------------------------------------------+
-| State | State      | Description                                                                   |
-| Code  |            |                                                                               | 
-+=======+============+===============================================================================+
+
+| Code | State      | Description                                                                    |
+| :--- |:-----      | :----------                                                                    | 
 | CA    | Canceled   | The job was canceled (could've been by the user or an administrator)          |
-+-------+------------+-------------------------------------------------------------------------------+
 | CD    | Completed  | The job completed successfully (exit code 0)                                  |
-+-------+------------+-------------------------------------------------------------------------------+
 | CG    | Completing | The job is in the process of completing (some processes may still be running) |
-+-------+------------+-------------------------------------------------------------------------------+
 | PD    | Pending    | The job is waiting for resources to be allocated                              |
-+-------+------------+-------------------------------------------------------------------------------+
 | R     | Running    | The job is currently running                                                  |
-+-------+------------+-------------------------------------------------------------------------------+
+
 
 
 Job Reason Codes
@@ -151,27 +131,19 @@ Job Reason Codes
 
 In addition to state codes, jobs that are pending will have a "reason code" to explain why the job is pending. Completed jobs will have a reason describing how the job ended. Some codes you might see include:
 
-+-------------------+---------------------------------------------------------------------------------------------------------------+
+
 | Reason            | Meaning                                                                                                       |
-+===================+===============================================================================================================+
+|:------            | :------                                                                                                       |
 | Dependency        | Job has dependencies that have not been met                                                                   |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | JobHeldUser       | Job is held at user's request                                                                                 |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | JobHeldAdmin      | Job is held at system administrator's request                                                                 |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | Priority          | Other jobs with higher priority exist for the partition/reservation                                           |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | Reservation       | The job is waiting for its reservation to become available                                                    |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | AssocMaxJobsLimit | The job is being held because the user/project has hit the limit on running jobs                              |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | ReqNodeNotAvail   | The requested a particular node, but it's currently unavailable (it's in use, reserved, down, draining, etc.) |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | JobLaunchFailure  | Job failed to launch (could due to system problems, invalid program name, etc.)                               |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
 | NonZeroExitCode   | The job exited with some code other than 0                                                                    |
-+-------------------+---------------------------------------------------------------------------------------------------------------+
+
 
 Many other states and job reason codes exist. For a more complete description, see the ``squeue`` man page (either on the system or online).
 
