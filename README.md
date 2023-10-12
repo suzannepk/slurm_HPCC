@@ -7,20 +7,6 @@ Slurm documentation for each command is available via the ``man`` utility, and o
 
 Some common Slurm commands are summarized in the table below. More complete examples are given in the Monitoring and Modifying Batch Jobs section of this guide.
 
-| Rank  | Name             | Program                       | Accuracy | Speed   |
-| :---  | :---             | :---------:                   | :------: | :---:   |
-| 1.    | Mercy A.         | SIAM HPC-CC 2022              | 62.21%   | 652s    | 
-| 2.    | Justin B.        | Summer HPC-CC 2022            | 61.94%   | 804s    |
-| 3.    | Ahmedur S.       | SC HPC-CC 2022                | 60.35%   | 953s    |
-| 4.    | Madhu G.         | Summer HPC-CC 2022            | 63.86%   | 1191s   |
-| 5.    | Gavin S.         | Summer HPC-CC 2022            | 65.43%   | 1262s   |
-| 6.    | Johannes K.      | Summer HPC-CC 2022            | 65.71%   | 1389s   |
-| 7.    | Alessandro B.    | Summer HPC-CC 2022            | 62.71%   | 1659s   |
-| 8.    | Sola O.          | Summer HPC-CC 2022            | 64.87%   | 1704s   |
-| 9.    | Abigail W.       | Summer HPC-CC 2022            | 61.04%   | 2161s   |
-| 10.   | Moyi T.          | Summer HPC-CC 2022            | 62.33%   | 2164s   |
-
-
 
 | Command      | Action/Task                                    | LSF Equivalent                     |
 |:-------:     | :----------:                                   | :-------------:                    |
@@ -43,8 +29,7 @@ To submit a batch script, use the command ``sbatch myjob.sl``
 
 Consider the following batch script:
 
-.. code-block:: bash
-   :linenos:
+```
 
     #!/bin/bash
     #SBATCH -A ABC123
@@ -59,35 +44,26 @@ Consider the following batch script:
     srun ...
     cp my_output_file $PROJWORK/abc123/RunData/Output.456
 
+```
+
 In the script, Slurm directives are preceded by ``#SBATCH``, making them appear as comments to the shell. Slurm looks for these directives through the first non-comment, non-whitespace line. Options after that will be ignored by Slurm (and the shell).
 
-+------+-------------------------------------------------------------------------------------------------+
+
 | Line | Description                                                                                     |
-+======+=================================================================================================+
+| :--: | :----------:                                                                                    |
 |    1 | Shell interpreter line                                                                          |
-+------+-------------------------------------------------------------------------------------------------+
 |    2 | OLCF project to charge                                                                          |
-+------+-------------------------------------------------------------------------------------------------+
 |    3 | Job name                                                                                        |
-+------+-------------------------------------------------------------------------------------------------+
 |    4 | Job standard output file (``%x`` will be replaced with the job name and ``%j`` with the Job ID) |
-+------+-------------------------------------------------------------------------------------------------+
 |    5 | Walltime requested (in ``HH:MM:SS`` format). See the table below for other formats.             |
-+------+-------------------------------------------------------------------------------------------------+
 |    6 | Partition (queue) to use                                                                        |
-+------+-------------------------------------------------------------------------------------------------+
 |    7 | Number of compute nodes requested                                                               |
-+------+-------------------------------------------------------------------------------------------------+
 |    8 | Blank line                                                                                      |
-+------+-------------------------------------------------------------------------------------------------+
 |    9 | Change into the run directory                                                                   |
-+------+-------------------------------------------------------------------------------------------------+
 |   10 | Copy the input file into place                                                                  |
-+------+-------------------------------------------------------------------------------------------------+
 |   11 | Run the job ( add layout details )                                                              |
-+------+-------------------------------------------------------------------------------------------------+
 |   12 | Copy the output file to an appropriate location.                                                |
-+------+-------------------------------------------------------------------------------------------------+
+
 
 .. _frontier-interactive:
 
