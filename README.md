@@ -7,6 +7,8 @@ Goals:
 * Understand how to modify and submit an existing batch script
 * Understand how to run a job with slurm
 * Explore job layout on the node.
+* Understand how to query the queue for your jobs status and read the results
+
 
 Frontier uses SchedMD's Slurm Workload Manager for scheduling and managing jobs. Slurm maintains similar functionality to other schedulers such as IBM's LSF, but provides unique control of Frontier's resources through custom commands and options specific to Slurm. A few important commands can be found in the conversion table below, but please visit SchedMD's `Rosetta Stone of Workload Managers <https://slurm.schedmd.com/rosetta.pdf>`__ for a more complete conversion reference. 
 
@@ -25,7 +27,7 @@ Some common Slurm commands are summarized in the table below. More complete exam
 | ``scancel``  | Cancel a job or job step                       | ``bkill``                          |
 | ``scontrol`` | View or modify job configuration.              | ``bstop``, ``bresume``, ``bmod``   |
 
-
+This challegne will guide your through using ``sbatch``,  ``srun`` and ``squeue``. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduer to manage the workload since we all need to share a limit nubmer of nodes for the crash course.  Let's start by learning what is needed for a batch script. 
 
 Batch Scripts
 -------------
@@ -72,7 +74,7 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |   12 | Copy the output file to an appropriate location.                                                |
 
 
-.. _frontier-interactive:
+
 
 Interactive Jobs
 ----------------
