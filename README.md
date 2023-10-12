@@ -81,57 +81,26 @@ Common Slurm Options
 
 The table below summarizes options for submitted jobs. Unless otherwise noted, they can be used for either batch scripts or interactive batch jobs. For scripts, they can be added on the ``sbatch`` command line or as a ``#BSUB`` directive in the batch script. (If they're specified in both places, the command line takes precedence.) This is only a subset of all available options. Check the `Slurm Man Pages <https://slurm.schedmd.com/man_index.html>`__ for a more complete list.
 
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
+
 | Option                 | Example Usage                              | Description                                                                          |
-+========================+============================================+======================================================================================+
+|:------                 |:--------------                             |:-----------                                                                          |          
 | ``-A``                 | ``#SBATCH -A ABC123``                      | Specifies the project to which the job should be charged                             |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``-N``                 | ``#SBATCH -N 1024``                        | Request 1024 nodes for the job                                                       |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours.                                                       |
 |                        |                                            | Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds   |
 |                        |                                            | days-hours, days-hours:minutes, or days-hours:minutes:seconds                        |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | | Number of active hardware threads per core. Can be 1 or 2 (1 is default)           |
 |                        |                                            | | **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.       |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
-| ``-d``                 | ``#SBATCH -d afterok:12345``               | Specify job dependency (in this example, this job cannot start until job 12345 exits |
-|                        |                                            | with an exit code of 0. See the Job Dependency section for more information          |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
-| ``-C``                 | ``#SBATCH -C nvme``                        | Request the burst buffer/NVMe on each node be made available for your job. See       |
-|                        |                                            | the Burst Buffers section for more information on using them.                        |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``-J``                 | ``#SBATCH -J MyJob123``                    | Specify the job name (this will show up in queue listings)                           |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``-o``                 | ``#SBATCH -o jobout.%j``                   | File where job STDOUT will be directed (%j will be replaced with the job ID).        |
 |                        |                                            | If no `-e` option is specified, job STDERR will be placed in this file, too.         |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``-e``                 | ``#SBATCH -e joberr.%j``                   | File where job STDERR will be directed (%j will be replaced with the job ID).        |
 |                        |                                            | If no `-o` option is specified, job STDOUT will be placed in this file, too.         |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``--mail-type``        | ``#SBATCH --mail-type=END``                | Send email for certain job actions. Can be a comma-separated list. Actions include   |
 |                        |                                            | BEGIN, END, FAIL, REQUEUE, INVALID_DEPEND, STAGE_OUT, ALL, and more.                 |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``--mail-user``        | ``#SBATCH --mail-user=user@somewhere.com`` | Email address to be used for notifications.                                          |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
 | ``--reservation``      | ``#SBATCH --reservation=MyReservation.1``  | Instructs Slurm to run a job on nodes that are part of the specified reservation.    |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
-| ``-S``                 | ``#SBATCH -S 8``                           | Instructs Slurm to reserve a specific number of cores per node (default is 8).       |
-|                        |                                            | Reserved cores cannot be used by the application.                                    |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
-| ``--signal``           | ``#SBATCH --signal=USR1@300``              || Send the given signal to a job the specified time (in seconds) seconds before the   |
-|                        |                                            | job reaches its walltime. The signal can be by name or by number (i.e. both 10 and   |
-|                        |                                            | USR1 would send SIGUSR1).                                                            |
-|                        |                                            ||                                                                                     |
-|                        |                                            || Signaling a job can be used, for example, to force a job to write a checkpoint just |
-|                        |                                            | before Slurm kills the job (note that this option only sends the signal; the user    |
-|                        |                                            | must still make sure their job script traps the signal and handles it in the desired |
-|                        |                                            | manner).                                                                             |
-|                        |                                            ||                                                                                     |
-|                        |                                            || When used with ``sbatch``, the signal can be prefixed by "B:"                       |
-|                        |                                            | (e.g. ``--signal=B:USR1@300``) to tell Slurm to signal only the batch shell;         |
-|                        |                                            | otherwise all processes will be signaled.                                            |
-+------------------------+--------------------------------------------+--------------------------------------------------------------------------------------+
+
 
 
 Slurm Environment Variables
