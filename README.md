@@ -174,7 +174,53 @@ Did you see that your job was queued and why it was not running yet? Its possibl
 
 When your job is done `ls` will show an output file in your working directory. 
 
+Srun Results for Example 1
+--------------------------
+Let's look at the output of your job and use that example to begin to understand what the srun commands do to organize work on the compute node. To interpret the results you need to understand some basics of the node hardware, and the parallel programming models MPI and OpenMP.   
 
+The compute nodes are composed of hardware cores (CPUs) that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
+
+To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. 
+
+The output of hello_mpi_omp will look like this:
+
+MPI taskID, OpenMP process ID, Hardware Thead ID, Node ID 
+```
+MPI 000 - OMP 000 - HWT 001 - Node crusher035
+```
+The example's  1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 0 OpenMP processes. For Srun that looks like: 
+```
+srun -N 1 -n 1 -c 1 ./hello_mpi_omp
+```
+The output from hello_mpi_omp
+``` 
+MPI 000 - OMP 000 - HWT 001 - Node crusher035
+```
+This means MPI task 000 ran on hardware thread 001 on node 35. The OpemMP process ID defaults to 000 in hello_mpi_omp, when we have no processes running. 
+
+To see if you got the same result from your job do
+
+```
+ls
+```
+
+You will see something like this:
+
+```
+hello_mpi_omp    hello_mpi_omp.o    submit.sl
+hello_mpi_omp.c  Makefile         *srun_YOUR-JOB-NAME-<your-job-ID-number>.out*
+```
+do 
+
+```
+vi   srun_YOUR-JOB-NAME-<your-job-ID-number>
+
+```
+where you replace `YOUR-JOB-NAME` and `your-job-ID-number` with the name and number from the file you listed, 
+
+
+
+OK now let’s add some OpenMP processes:
 
 
 
