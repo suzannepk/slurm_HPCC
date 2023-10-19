@@ -172,7 +172,7 @@ MPI taskID, OpenMP process ID, Hardware Thead ID, Node ID
 ```
 MPI 000 - OMP 000 - HWT 001 - Node crusher035
 ```
-The example's  1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 0 OpenMP processes. For Srun that looks like: 
+The example's srun was setup fpr  1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 0 OpenMP processes. For Srun that looks like: 
 ```
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
@@ -180,9 +180,9 @@ The output from hello_mpi_omp
 ``` 
 MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
-This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. The OpemMP process ID defaults to 000 in hello_mpi_omp, when we have no processes running. 
+This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
 
-To see if you got the same result from your job do:
+To see if you got the same result from your job, do:
 
 ```
 ls
