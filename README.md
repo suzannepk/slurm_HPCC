@@ -167,20 +167,20 @@ The compute nodes are composed of hardware cores (CPUs) that have several hardwa
 To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. 
 
 The output of hello_mpi_omp will look like this:
+```
+MPI 000 - OMP 000 - HWT 001 - Node frontier035
+```
 
-MPI taskID, OpenMP process ID, Hardware Thead ID, Node ID 
-```
-MPI 000 - OMP 000 - HWT 001 - Node crusher035
-```
-The example's srun was setup fpr  1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 0 OpenMP processes. For Srun that looks like: 
+| MPI taskID| OpenMP process ID| Hardware Thead ID |  Node ID          |
+| MPI 000   | OMP 000          | HWT 001           |  Node frontier035 |
+
+This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
+
+Remeber theexample's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP processe. 
 ```
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
-The output from hello_mpi_omp
-``` 
-MPI 000 - OMP 000 - HWT 001 - Node frontier035
-```
-This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
+
 
 To see if you got the same result from your job, do:
 
