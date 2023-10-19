@@ -74,19 +74,19 @@ To submit a batch script, use the command ``sbatch submit.sl``
 Consider the following batch script:
 
 ```
+#!/bin/bash
+#SBATCH -A TRN###
+#SBATCH -J srun_<enter your name here>
+#SBATCH -o %x-%j.out
+#SBATCH -t 10:00
+#SBATCH -p batch
+#SBATCH -N 1
 
-    #!/bin/bash
-    #SBATCH -A ABC123
-    #SBATCH -J RunSim123
-    #SBATCH -o %x-%j.out
-    #SBATCH -t 10:00
-    #SBATCH -p batch
-    #SBATCH -N 1
+# number of OpenMP threads
+export OMP_NUM_THREADS=1
 
-    cd $MEMBERWORK/abc123/Run.456
-    cp $PROJWORK/abc123/RunData/Input.456 ./Input.456
-    srun ...
-    cp my_output_file $PROJWORK/abc123/RunData/Output.456
+# jsrun command to modify 
+srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 
 ```
 
@@ -103,13 +103,14 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |    6 | Partition (queue) to use                                                                        |
 |    7 | Number of compute nodes requested                                                               |
 |    8 | Blank line                                                                                      |
-|    9 | Change into the run directory                                                                   |
-|   10 | Copy the input file into place                                                                  |
-|   11 | Run the job ( add layout details )                                                              |
-|   12 | Copy the output file to an appropriate location.                                                |
+|    9 | Comment                                                                                         |
+|   10 | Sets the number of OpenMP threads                                                                |
+|   11 | Blank line                                                                                      |
+|   12 | Comment                                                                                         |
+|   13 | Run the job ( add layout details )                                                              |
 
-We will modify a simple batch script now to give you practice. Note in the simple script we will be running from, and writing to, the same directory that we submit the batch script from, so we will not need to have lines 9, 10 and 12, but those will be useful for you if you ever need to target your codes' reads and writes to the parallel filesystem’s directories in the future.
 
+We will modify a simple batch script now to give you practice. 
 Open the batch script with vi (or your favored text editor). To use Vi do the following:
 
 ```
@@ -151,28 +152,11 @@ A job will transition through several states during its lifetime. Common ones in
 
 
 
-Job Reason Codes
-----------------
-
-In addition to state codes, jobs that are pending will have a "reason code" to explain why the job is pending. Completed jobs will have a reason describing how the job ended. Some codes you might see include:
+Did you see that your job was queued and why it was not running yet? It’s possible that your job would have run before you could see your query, so there might not be an entry for it in the queue. 
+The other way to check if it ran, is to see if there is an output file in you directory.
 
 
-| Reason            | Meaning                                                                                                       |
-|:------            | :------                                                                                                       |
-| Dependency        | Job has dependencies that have not been met                                                                   |
-| JobHeldUser       | Job is held at user's request                                                                                 |
-| JobHeldAdmin      | Job is held at system administrator's request                                                                 |
-| Priority          | Other jobs with higher priority exist for the partition/reservation                                           |
-| Reservation       | The job is waiting for its reservation to become available                                                    |
-| AssocMaxJobsLimit | The job is being held because the user/project has hit the limit on running jobs                              |
-| ReqNodeNotAvail   | The requested a particular node, but it's currently unavailable (it's in use, reserved, down, draining, etc.) |
-| JobLaunchFailure  | Job failed to launch (could due to system problems, invalid program name, etc.)                               |
-| NonZeroExitCode   | The job exited with some code other than 0                                                                    |
-
-
-Did you see that your job was queued and why it was not running yet? Its possible, that your job would have run before you could see your query 
-
-When your job is done `ls` will show an output file in your working directory. 
+When your job is done `ls` will show the output file.  
 
 Srun Results for Example 1
 --------------------------
@@ -194,11 +178,11 @@ srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
 The output from hello_mpi_omp
 ``` 
-MPI 000 - OMP 000 - HWT 001 - Node crusher035
+MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
-This means MPI task 000 ran on hardware thread 001 on node 35. The OpemMP process ID defaults to 000 in hello_mpi_omp, when we have no processes running. 
+This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. The OpemMP process ID defaults to 000 in hello_mpi_omp, when we have no processes running. 
 
-To see if you got the same result from your job do
+To see if you got the same result from your job do:
 
 ```
 ls
@@ -216,11 +200,17 @@ do
 vi   srun_YOUR-JOB-NAME-<your-job-ID-number>
 
 ```
-where you replace `YOUR-JOB-NAME` and `your-job-ID-number` with the name and number from the file you listed, 
+where you replace `YOUR-JOB-NAME` and `your-job-ID-number` with the name and number from the file you listed.  
+
+If you don't see output that looks like, 
+```
+MPI 000 - OMP 000 - HWT 001 - Node frontier035
+```
+Retrace your steps or ask for help from the TAs. 
 
 
 
-OK now let’s add some OpenMP processes:
+OK now let’s add more OpenMP processes:
 
 
 
