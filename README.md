@@ -130,12 +130,12 @@ The sections below will help you understand how to read the output that is given
 Job States
 ----------
 
-A job will transition through several states during its lifetime. Common ones include:
 
+A job will transition through several states during its lifetime. Common ones include:
 
 | Code | State      | Description                                                                    |
 | :--- |:-----      | :----------                                                                    | 
-| CA    | Canceled   | The job was canceled (could've been by the user or an administrator)          |
+| CA    | Canceled   | The job was canceled (could've been by the user or an administrator)         |
 | CD    | Completed  | The job completed successfully (exit code 0)                                  |
 | CG    | Completing | The job is in the process of completing (some processes may still be running) |
 | PD    | Pending    | The job is waiting for resources to be allocated                              |
@@ -144,14 +144,14 @@ A job will transition through several states during its lifetime. Common ones in
 
 
 Did you see that your job was queued and why it was not running yet? It’s possible that your job would have run before you could see your query, so there might not be an entry for it in the queue. 
-The other way to check if it ran, is to see if there is an output file in you directory.
+The other way to check if it ran, is to see if there is an output file in your directory.
 
 
 When your job is done `ls` will show the output file.  
 
-Srun Results for Example 1
+Srun Results Example
 --------------------------
-Let's look at the output of your job and use that example to begin to understand what the srun commands do to organize work on the compute node. To interpret the results you need to understand some basics of the node hardware, and the parallel programming models MPI and OpenMP.   
+Let's examine the output of your job and use that example to begin to understand how to use srun commands to organize work on the compute node. To interpret the results, you need to understand some basics of the node hardware, and the parallel programming models MPI and OpenMP.   
 
 The compute nodes are composed of hardware cores (CPUs) that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
 
@@ -164,7 +164,7 @@ vi hello_mpi-omp.c
 To close the file from vi do "esc". ":q". 
 
 
-In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. 
+In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpemMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
 
 The output of hello_mpi_omp should look like this:
 ```
@@ -176,11 +176,10 @@ MPI 000 - OMP 000 - HWT 001 - Node frontier035
 
 This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
 
-Remeber theexample's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP processe. 
+Remember, the example's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP processe. 
 ```
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
-
 
 To see if you got the same result from your job, do:
 
@@ -206,11 +205,63 @@ If you don't see output that looks like,
 ```
 MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
-Retrace your steps or ask for help from the TAs. 
+Retrace your steps or ask for help from the instructors. 
+
+
+Multiple MPI tasks Exercise 
+-------------------
+OK now let’s run with 7 MPI tasks. 
+
+
+Here is what we have learned about srun so far: 
+
+| Options| Meaning                      |
+| :---   |:-----                        |
+| N      | Number of Nodes              |
+| n      | MPI tasks per node           |
+| c      | nubmer of CPU cores per task |
+
+Starting with our previos srun line: 
+
+```
+srun -N 1 -n 1 -c 1 ./hello_mpi_omp
+```
+Which option would you set to `7` to get 7 MPI tasks per node? 
+
+Open your submit.sl with `vi` or your favored text editor and make the change. Then submit your job with `sbatch submit.sl. 
+When your job is done, open the output file (looks like a variation of srun_myjob-397453.out) with 'vi' or a text editor. Does it look like this? :
+
+```
+MPI 001 - OMP 000 - HWT 009 - Node frontier143
+MPI 004 - OMP 000 - HWT 033 - Node frontier143
+MPI 000 - OMP 000 - HWT 001 - Node frontier143
+MPI 002 - OMP 000 - HWT 017 - Node frontier143
+MPI 003 - OMP 000 - HWT 025 - Node frontier143
+MPI 005 - OMP 000 - HWT 041 - Node frontier143
+MPI 006 - OMP 000 - HWT 049 - Node frontier143
+
+```
+If so you sucessfully ran 7 MPI tasks per node. 
+
+Multiple OpenMP processes Exercise 
+------------------------------
+
+Let's now try to run two OpenMP processes per MPI task. 
+
+In your batch script, submit.sl the line that controls the number of OpenMP processes is: 
+
+```
+export OMP_NUM_THREADS=1
+```
+
+Open submit.sl and change that line so you now have two OpenMP process per task. 
+
+How many CPU cores are avaible to each of your MPI tasks? Do you think your cores will be able to handle the load with two processes each? 
+
+Submit your job to find out. 
 
 
 
-OK now let’s add more OpenMP processes:
 
 
 
@@ -220,7 +271,6 @@ OK now let’s add more OpenMP processes:
 
 
 
-Use
 Common Slurm Options
 --------------------
 
