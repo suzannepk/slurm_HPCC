@@ -57,8 +57,7 @@ Now that we have an executable to run, let’s modify and use a batch script to 
 
 Batch Scripts
 -------------
-
-The most common way to interact with the batch system is via batch scripts. A batch script is simply a shell script with added directives to request various resoruces from or provide certain information to the scheduling system.  Aside from these directives, the batch script is simply the series of commands needed to set up and run your job.
+The most common way to interact with the batch system is via batch scripts. A batch script is simply a shell script with added directives to request various resources from or provide certain information to the scheduling system.  Aside from these directives, the batch script is simply the series of commands needed to set up and run your job.
 
 To submit a batch script, use the command ``sbatch submit.sl``
 
@@ -95,7 +94,7 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |    7 | Number of compute nodes requested                                                               |
 |    8 | Blank line                                                                                      |
 |    9 | Comment                                                                                         |
-|   10 | Sets the number of OpenMP threads                                                                |
+|   10 | Sets the number of OpenMP threads                                                               |
 |   11 | Blank line                                                                                      |
 |   12 | Comment                                                                                         |
 |   13 | Run the job ( add layout details )                                                              |
@@ -108,24 +107,25 @@ Open the batch script with vi (or your favored text editor). To use Vi do the fo
 vi submit.sl
 
 ```
-Use "esc", ":i" to put vi in insert mode, use the explainations in the example above to make the following modififcations to the batch script. 
+Use "esc", ":i" to put vi in insert mode, use the explainations in the example above to make the following modifications to the batch script. 
 1. Change the project to the project ID for this tutorial.
-2. Customize your job's name
+2. Customize your job's name.
 3. Change the time from 10 minutes to 8 minutes.
 
-Submit the batch script to run by doing 
+Submit the batch script to run by doing: 
 
 ```
 sbatch submit.sl
 
 ```
 
-To see what state your job is in use 
+To see what state your job is in use: 
 ```
 squeue -u <your_user_id>
 
 ````
-The sections below will help you understand how to read the output that is given. 
+The sections below will help you understand how to read the output that is given.
+
 
 Job States
 ----------
