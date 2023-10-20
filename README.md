@@ -164,9 +164,18 @@ Let's look at the output of your job and use that example to begin to understand
 
 The compute nodes are composed of hardware cores (CPUs) that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
 
-To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. 
+To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. 
+If you like, you may look at the code by doing:
+```
+vi hello_mpi-omp.c
 
-The output of hello_mpi_omp will look like this:
+```
+To close the file from vi do "esc". ":q". 
+
+
+In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. 
+
+The output of hello_mpi_omp should look like this:
 ```
 MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
