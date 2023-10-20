@@ -27,7 +27,7 @@ Some common Slurm commands are summarized in the table below. More complete exam
 | ``scancel``  | Cancel a job or job step                       | 
 | ``scontrol`` | View or modify job configuration.              | 
 
-This challenge will guide your through using ``sbatch`` the command to send a job to the scheduler, ``srun`` the parallel job launcher and ``squeue``, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
+This challenge will guide you through using ``sbatch`` the command to send a job to the scheduler, ``srun`` the parallel job launcher and ``squeue``, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
 
 Compiling the test code
 -----------------------
