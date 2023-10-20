@@ -31,9 +31,9 @@ This challenge will guide you through using ``sbatch`` the command to send a job
 
 Compiling the test code
 -----------------------
-We will use a code called `hello_mpi_omp` writen by Tom Papatheodore as our test example. This code's output will display where each process runs on the compute node in its output. To start we will just see how to run it with a batch script. 
+We will use a code called `hello_mpi_omp` written by Tom Papatheodore as our test example. This code's output will display where each process runs on the compute node. 
 
-To begin, make sure you are in the directory for the challenge by doing 
+To begin, make sure you are in the directory for the challenge by doing: 
 
 ```
 cd ~/hands-on-with-Frontier-/challenges/Srun
@@ -42,19 +42,9 @@ cd ~/hands-on-with-Frontier-/challenges/Srun
 
 Do ``ls`` to verify that you see `hello_mpi_omp.c`, `makefile` and `submit.sl’ listed. 
 
-If you like, you may look at the code by doing 
-```
-vi hello_mpi-omp.c
+We compile the code using a makefile, which is a file that specifies how to compile the program. If you are curious, you may view the makefile by doing `` vi Makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
 
-```
-But you may not understand what it is doing until you have done the MPI and OpenMP challenges. 
-
-To close the file from vi do "esc". ":q". 
-
-
-We will use a makefile, which is a file that specifies how to compile the program. If you are curious you may view the makefile by doing `` vi Makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
-
-We will use the default programming environment on Frontier to compile this code, which means using the Cray programming environment and Cray-mpich for MPI. On Frontier these are set up when you login. If running this tutorial on other machines, you would need to use their documentation to learn how to setup a programming environment to support MPI and OpenMP.
+We will use the default programming environment on Frontier to compile this code, which means using the Cray programming environment and Cray-MPICH for MPI. On Frontier these are set up when you login. If running this tutorial on other machines, you would need to use their documentation to learn how to setup a programming environment to support MPI and OpenMP.
 
 To use the makefile to compile the code on Frontier, do:
 ```
@@ -62,7 +52,8 @@ make
 ```
 If all goes right, you will see that this produces an executable file called `hello_mpi_omp`. You may use `ls` to verify that the file is present. If you don't see it retrace your steps to find what you missed. You may also ask an instructor. 
 
-Now that we have an executable to run, lets use a batch script to run it! 
+Now that we have an executable to run, let’s modify and use a batch script to run it!
+
 
 Batch Scripts
 -------------
