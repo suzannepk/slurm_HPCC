@@ -1,7 +1,7 @@
 Slurm
 -----
 
-Goals: 
+**Goals:** 
 
 * Familiarize yourself with batch scripts
 * Understand how to modify and submit an existing batch script
@@ -208,7 +208,7 @@ MPI 000 - OMP 000 - HWT 001 - Node frontier035
 Retrace your steps or ask for help from the instructors. 
 
 
-Multiple MPI tasks Exercise 
+Multiple MPI Tasks Exercise 
 -------------------
 OK now let’s run with 7 MPI tasks. 
 
@@ -219,9 +219,9 @@ Here is what we have learned about srun so far:
 | :---   |:-----                        |
 | N      | Number of Nodes              |
 | n      | MPI tasks per node           |
-| c      | nubmer of CPU cores per task |
+| c      | number of CPU cores per task |
 
-Starting with our previos srun line: 
+Starting with our previous srun line: 
 
 ```
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
@@ -241,34 +241,64 @@ MPI 005 - OMP 000 - HWT 041 - Node frontier143
 MPI 006 - OMP 000 - HWT 049 - Node frontier143
 
 ```
-If so you sucessfully ran 7 MPI tasks per node. 
+If so, you successfully ran 7 MPI tasks per node. 
 
-Multiple OpenMP processes Exercise 
+Multiple OpenMP Processes Exercise 
 ------------------------------
 
 Let's now try to run two OpenMP processes per MPI task. 
 
-In your batch script, submit.sl the line that controls the number of OpenMP processes is: 
+In your batch script, submit.sl, the line that controls the number of OpenMP processes is: 
 
 ```
 export OMP_NUM_THREADS=1
 ```
+In this case it is asking for one OpenMP process per task. 
 
 Open submit.sl and change that line so you now have two OpenMP process per task. 
 
-How many CPU cores are avaible to each of your MPI tasks? Do you think your cores will be able to handle the load with two processes each? 
+How many CPU cores are available to each of your MPI tasks? Do you think your cores will be able to handle the load with two processes each? 
 
-Submit your job to find out. 
+Submit your job to find out. Look at the output file when you are done.
+
+If you ran on Frontier, your output would look like this: 
+
+```
+WARNING: Requested total thread count and/or thread affinity may result in
+oversubscription of available CPU resources!  Performance may be degraded.
+Explicitly set OMP_WAIT_POLICY=PASSIVE or ACTIVE to suppress this message.
+Set CRAY_OMP_CHECK_AFFINITY=TRUE to print detailed thread-affinity messages.
+MPI 000 - OMP 000 - HWT 001 - Node frontier139
+MPI 000 - OMP 001 - HWT 001 - Node frontier139
+MPI 001 - OMP 000 - HWT 009 - Node frontier139
+MPI 001 - OMP 001 - HWT 009 - Node frontier139
+MPI 002 - OMP 000 - HWT 017 - Node frontier139
+MPI 002 - OMP 001 - HWT 017 - Node frontier139
+MPI 003 - OMP 000 - HWT 025 - Node frontier139
+MPI 003 - OMP 001 - HWT 025 - Node frontier139
+.  .  .    
+```
+The CPU's cores could easily handle two processes each, but that is not an ideal situation because the core would need to wait for one process to finish before it could start running the other, that is called oversubscription and the reason for the warning in my example output. 
+
+A better plan is to reserve a core for each process. What would you need to change about your current srun line, in submit.sl, to get a core reserved for each process in each MPI task? 
+
+Make that change and submit the job again. Check your output to see if the warning is gone. 
 
 
+Putting It All Together Exercise
+--------------------------------
+
+You can see that with just a few of the possible Srun options that we have a lot of control at the run time of our program over how its work in done in parallel on the node! 
+
+For your final exercise in the challenge, see if you can setup and run the following job layouts for hello_mpi_omp without getting errors. Check your output.  
+
+1.)  2 MPI tasks with 3 OpenMP processes each on one node. (Your output file should have 6 lines) 
+2.)  8 MPI tasks with 4 OpenMP processes each on one node. (Your output file should have 32 lines) 
+
+When you are done, copy the path to either one of those output files to the google sheet to show that you have done the exercise.
 
 
-
-
-
-
-
-
+So in summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler and we explored srun options that control how to parallel job launcher lays out work on the node.  If you want to learn more see the Frontier User Documentation's Slurm section, where there are many more examples: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm 
 
 
 Common Slurm Options
