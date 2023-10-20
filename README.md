@@ -17,17 +17,17 @@ Slurm documentation for each command is available via the ``man`` utility, and o
 Some common Slurm commands are summarized in the table below. More complete examples are given in the Monitoring and Modifying Batch Jobs section of this guide.
 
 
-| Command      | Action/Task                                    | LSF Equivalent                     |
-|:-------:     | :----------                                    | :-------------                     |
-| ``squeue``   | Show the current queue                         | ``bjobs``                          |
-| ``sbatch``   | Submit a batch script                          | ``bsub``                           |
-| ``salloc``   | Submit an interactive job                      | ``bsub -Is $SHELL``                |
-| ``srun``     | Launch a parallel job                          | ``jsrun``                          |
-| ``sacct``    | View accounting information for jobs/job steps | ``bacct``                          |
-| ``scancel``  | Cancel a job or job step                       | ``bkill``                          |
-| ``scontrol`` | View or modify job configuration.              | ``bstop``, ``bresume``, ``bmod``   |
+| Command      | Action/Task                                    | 
+|:-------:     | :----------                                    | 
+| ``squeue``   | Show the current queue                         | 
+| ``sbatch``   | Submit a batch script                          | 
+| ``salloc``   | Submit an interactive job                      | 
+| ``srun``     | Launch a parallel job                          | 
+| ``sacct``    | View accounting information for jobs/job steps | 
+| ``scancel``  | Cancel a job or job step                       | 
+| ``scontrol`` | View or modify job configuration.              | 
 
-This challegne will guide your through using ``sbatch``,  ``srun`` and ``squeue``. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduer to manage the workload since we all need to share a limit nubmer of nodes for the crash course.  Let's start by first setting up our test code and then learning how to run it with a batch script.  
+This challenge will guide your through using ``sbatch`` the command to send a job to the scheduler, ``srun`` the parallel job launcher and ``squeue``, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
 
 Compiling the test code
 -----------------------
