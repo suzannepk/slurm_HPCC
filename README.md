@@ -12,7 +12,7 @@ Slurm
 
 Frontier uses SchedMD's Slurm Workload Manager for scheduling and managing jobs. Slurm maintains similar functionality to other schedulers such as IBM's LSF, but provides unique control of Frontier's resources through custom commands and options specific to Slurm. A few important commands can be found in the conversion table below, but please visit SchedMD's `Rosetta Stone of Workload Managers <https://slurm.schedmd.com/rosetta.pdf>`__ for a more complete conversion reference. 
 
-Slurm documentation for each command is available via the ``man`` utility, and on the web at `<https://slurm.schedmd.com/man_index.html>`__. Additional documentation is available at `<https://slurm.schedmd.com/documentation.html>`__.
+Slurm documentation for each command is available via the ``man`` utility, and on the web at [https://slurm.schedmd.com/man_index.html](https://slurm.schedmd.com/man_index.html). Additional documentation is available at [https://slurm.schedmd.com/documentation.html](https://slurm.schedmd.com/documentation.html)
 
 Some common Slurm commands are summarized in the table below. 
 
