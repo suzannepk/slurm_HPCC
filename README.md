@@ -184,7 +184,7 @@ vi hello_mpi-omp.c
 ```
 To close the file from vi do `esc`, followed by `:q`. 
 
-In real HPC applications, MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpenMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
+In real HPC applications, MPI tasks and OpenMP processes are used to organize the parallel tasks like solving matrix algebra or distributing data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpenMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
 
 The output of hello_mpi_omp should look like this:
 
