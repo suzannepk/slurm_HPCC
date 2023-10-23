@@ -1,1 +1,1 @@
-This is where the tutorial's immages live. 
+This is where the tutorial's images live. 
