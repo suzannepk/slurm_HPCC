@@ -149,7 +149,7 @@ Did you see that your job was queued and why it was not running yet? It’s poss
 The other way to check if it ran, is to see if there is an output file in your directory.
 
 
-When your job is done `ls` will show the output file.  
+Typing `ls` will list all the files in your current directory and including the output file, if it exists.  
 
 Srun Results Example
 --------------------------
