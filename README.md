@@ -108,32 +108,29 @@ vi submit.sl
 
 ```
 
-Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script. 
-1. Change the project to the project ID for this tutorial.
+Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script:
+1. Change the project ID to the project ID for this tutorial.
 2. Customize your job's name.
 3. Change the time from 10 minutes to 8 minutes.
 
-When you are finished, come out of insert mode by hitting `esc` then type `:wq` and hit `return` to save your file and quit vi.  
+When you are finished, come out of vi insert mode by hitting `esc` then type `:wq` and hit `return` to save your file and quit vi.  
 
 Submit the batch script to run by doing:
 
 
 ```
 sbatch submit.sl
-
 ```
 
 To see what state your job is in use: 
 ```
 squeue -u <your_user_id>
-
 ````
 The sections below will help you understand how to read the output that is given.
 
 
 Job States
 ----------
-
 
 A job will transition through several states during its lifetime. Common ones include:
 
@@ -146,18 +143,27 @@ A job will transition through several states during its lifetime. Common ones in
 | R     | Running    | The job is currently running                                                  |
 
 
-
-Did you see that your job was queued and why it was not running yet? It’s possible that your job would have run before you could see your query, so there might not be an entry for it in the queue. 
-The other way to check if it ran, is to see if there is an output file in your directory.
-
+Did you see that your job was queued and why it was not running yet? It’s possible that your job could have run before your query was sent, so there might not be an entry for it in the queue. 
+The other way to check if the job ran, is to see if there is an output file in your directory.
 
 Typing `ls` will list all the files in your current directory and including the output file, if it exists.  
 
+The filename will be composed of the name that your chose for your job in the batch script followed by the job ID number from the queue followed by `.out`. My output files look like this:
+```
+srun_SPK-397601.out
+```
+
 Srun Results Example
 --------------------------
-Let's examine the output of your job and use that example to begin to understand how to use srun commands to organize work on the compute node. To interpret the results, you need to understand some basics of the node hardware, and the parallel programming models MPI and OpenMP.   
+Let's examine the output of your job and use that example to begin to understand how to use srun commands to organize work on the compute node. To interpret the results, you need to understand some basics of the node hardware, and the parallel programming models utilized by hello_mpi_omp, called MPI and OpenMP.
 
-The compute nodes are composed of hardware cores (CPUs) that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
+The compute nodes are composed of a CPU made of seveal hardware cores that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
+
+Below is a picture of the Frontier compute node. 
+
+
+
+
 
 To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. 
 If you like, you may look at the code by doing:
