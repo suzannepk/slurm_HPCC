@@ -100,11 +100,13 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |   13 | Run the job ( add layout details )                                                              |
 
 
-We will modify your copy of this batch script now to give you practice. 
-Open the batch script with vi (or your favored text editor). To use Vi do the following:
+Next, let's modify your copy of this batch script to give you practice. 
+Open the batch script with vi (or your favored text editor). To use vi do the following:
 
 ```
 vi submit.sl
+
+```
 
 Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script. 
 1. Change the project to the project ID for this tutorial.
