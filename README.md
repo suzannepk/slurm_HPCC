@@ -175,7 +175,7 @@ The blue portion of the pictured node is the CPU. You can see that it has severa
 
 *Programming Models* 
 
-To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a variable and then write that information to the output file. 
+To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on, in a variable and then write that information to the output file. 
 
 If you like, you may look at the code by doing:
 
