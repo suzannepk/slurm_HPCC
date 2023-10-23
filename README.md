@@ -40,7 +40,7 @@ cd ~/hands-on-with-Frontier-/challenges/Srun
 
 ```
 
-Do ``ls`` to verify that you see `hello_mpi_omp.c`, `makefile` and `submit.sl’ listed. 
+Do ``ls`` to verify that you see `hello_mpi_omp.c`, `makefile` and `submit.sl` listed. 
 
 We compile the code using a makefile, which is a file that specifies how to compile the program. If you are curious, you may view the makefile by doing `` vi Makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
 
