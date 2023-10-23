@@ -168,6 +168,7 @@ Below is a picture of the Frontier compute node.
 </center>
 <br>
 
+The Blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which able to do streams independent tasks.  If you are running this tutorial on an different computer, the details of node may look a little different, but the same basic elements of cores and hardware threads will be similar for the CPU.   
 
 To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. 
 If you like, you may look at the code by doing:
