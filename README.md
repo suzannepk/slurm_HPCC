@@ -157,6 +157,8 @@ Srun Results Example
 --------------------------
 Let's examine the output of your job and use that example to begin to understand how to use srun commands to organize work on the compute node. To interpret the results, you need to understand some basics of the node hardware, and the parallel programming models utilized by hello_mpi_omp, called MPI and OpenMP.
 
+*Compute Node*
+
 The compute nodes are composed of a CPU made of seveal hardware cores that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
 
 Below is a picture of the Frontier compute node. 
@@ -170,7 +172,10 @@ Below is a picture of the Frontier compute node.
 
 The Blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which able to do streams independent tasks.  If you are running this tutorial on an different computer, the details of node may look a little different, but the same basic elements of cores and hardware threads will be similar for the CPU.   
 
-To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. 
+*Programming Models* 
+
+To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on, in a variable and then write that information to the output file. 
+
 If you like, you may look at the code by doing:
 ```
 vi hello_mpi-omp.c
@@ -178,8 +183,7 @@ vi hello_mpi-omp.c
 ```
 To close the file from vi do "esc". ":q". 
 
-
-In real HPC applications, the MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpemMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
+In real HPC applications, MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpenMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
 
 The output of hello_mpi_omp should look like this:
 ```
@@ -191,12 +195,13 @@ MPI 000 - OMP 000 - HWT 001 - Node frontier035
 
 This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
 
-Remember, the example's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP processe. 
+Remember, the example's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP process. 
 ```
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
 
-To see if you got the same result from your job, do:
+To see if you got the same result from your job, do: 
+
 
 ```
 ls
