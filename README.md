@@ -333,4 +333,4 @@ When you are done, copy the path to one of those output files to the google shee
 
 In summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler. We explored a few of the srun options that control how the parallel job launcher lays out work on the node.  
 
-If you want to learn more, see the Frontier User Documentation's Slurm section, where there are many more examples: [https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm).
+If you want to learn more, see the Frontier User Documentation's Slurm section, where there are many more examples:[https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm](https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm).
