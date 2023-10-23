@@ -162,7 +162,11 @@ The compute nodes are composed of a CPU made of seveal hardware cores that have 
 Below is a picture of the Frontier compute node. 
 
 
-
+<br>
+<center>
+<img src="images/Frontier_node.jpg" style="width:80%">
+</center>
+<br>
 
 
 To organize work in parallel, we use MPI tasks and OpenMP threads. These are specified by the program and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a varible and then write that information to the output file. 
