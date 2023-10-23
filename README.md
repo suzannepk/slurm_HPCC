@@ -5,7 +5,7 @@ Slurm
 
 * Familiarize yourself with batch scripts
 * Understand how to modify and submit an existing batch script
-* Understand how to run a job with slurm
+* Understand how to run a job with Slurm
 * Explore job layout on the node.
 * Understand how to query the queue for your jobs status and read the results
 
@@ -27,9 +27,9 @@ Some common Slurm commands are summarized in the table below.
 | ``scancel``  | Cancel a job or job step                       | 
 | ``scontrol`` | View or modify job configuration.              | 
 
-This challenge will guide you through using ``sbatch`` the command to send a job to the scheduler, ``srun`` the parallel job launcher and ``squeue``, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
+This challenge will guide you through using `sbatch` the command to send a job to the scheduler, `srun` the parallel job launcher and `squeue`, the command that shows the jobs that a queued to run. We will be submitting the jobs via batch scripts that allow us to take advantage of the scheduler to manage the workload. Let's start by first setting up our test code and then learning how to run it with a batch script.  
 
-Compiling the test code
+Compiling the Test code
 -----------------------
 We will use a code called `hello_mpi_omp` written by Tom Papatheodore as our test example. This code's output will display where each process runs on the compute node. 
 
@@ -42,11 +42,11 @@ cd ~/hands-on-with-Frontier-/challenges/Srun
 
 Do ``ls`` to verify that you see `hello_mpi_omp.c`, `makefile` and `submit.sl` listed. 
 
-We compile the code using a makefile, which is a file that specifies how to compile the program. If you are curious, you may view the makefile by doing `` vi Makefile``, but you do not need to understand that file to achieve the goals of this exercise. 
+We compile the code using a makefile, which is a file that specifies how to compile the program. If you are curious, you may view the makefile by doing `vi Makefile`, but you do not need to understand that file to achieve the goals of this exercise. 
 
 We will use the default programming environment on Frontier to compile this code, which means using the Cray programming environment and Cray-MPICH for MPI. On Frontier these are set up when you login. If running this tutorial on other machines, you would need to use their documentation to learn how to setup a programming environment to support MPI and OpenMP.
 
-To use the makefile to compile the code on Frontier, do:
+To use the Makefile to compile the code on Frontier, do:
 ```
 make
 ```
@@ -61,7 +61,7 @@ The most common way to interact with the batch system is via batch scripts. A ba
 
 To submit a batch script, use the command ``sbatch submit.sl``, but don't do that just yet, because you will need to customize the example batch script, `submit.sl` first. 
 
-The example batch script, `submit.sl` looks like this :
+The example batch script, `submit.sl` looks like this:
 
 ```
 #!/bin/bash
@@ -108,7 +108,7 @@ vi submit.sl
 
 ```
 
-Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script:
+Hit `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script:
 1. Change the project ID to the project ID for this tutorial.
 2. Customize your job's name.
 3. Change the time from 10 minutes to 8 minutes.
@@ -116,7 +116,6 @@ Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in 
 When you are finished, come out of vi insert mode by hitting `esc` then type `:wq` and hit `return` to save your file and quit vi.  
 
 Submit the batch script to run by doing:
-
 
 ```
 sbatch submit.sl
@@ -146,7 +145,7 @@ A job will transition through several states during its lifetime. Common ones in
 Did you see that your job was queued and why it was not running yet? It’s possible that your job could have run before your query was sent, so there might not be an entry for it in the queue. 
 The other way to check if the job ran, is to see if there is an output file in your directory.
 
-Typing `ls` will list all the files in your current directory and including the output file, if it exists.  
+Typing `ls` will list all the files in your current directory and including the output file if it exists.  
 
 The filename will be composed of the name that your chose for your job in the batch script followed by the job ID number from the queue followed by `.out`. My output files look like this:
 ```
@@ -159,7 +158,7 @@ Let's examine the output of your job and use that example to begin to understand
 
 *Compute Node*
 
-The compute nodes are composed of a CPU made of seveal hardware cores that have several hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
+The compute nodes are composed of a CPU made of several hardware cores that have a few hardware threads each. Most modern HPC nodes also have GPUs, but we will not focus on those yet. 
 
 Below is a picture of the Frontier compute node. 
 
@@ -170,38 +169,43 @@ Below is a picture of the Frontier compute node.
 </center>
 <br>
 
-The Blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which able to do streams independent tasks.  If you are running this tutorial on an different computer, the details of node may look a little different, but the same basic elements of cores and hardware threads will be similar for the CPU.   
+The Blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which enable them to do streams of 1000s of independent operations. 
+
+ If you are running this tutorial on a different computer, the details of the node may look a little different, but the basic elements of cores and hardware threads will be similar for the CPU.   
 
 *Programming Models* 
 
-To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on, in a variable and then write that information to the output file. 
+To organize work in parallel, hello_mpi_omp uses MPI tasks and OpenMP threads. These are specified by the program, and each does a specific task as set by the programmer. In the case of our hello_mpi_omp program, each MPI task gets the name of the node running the code and organizes its associated OpenMP processes to store their process IDs and the ID of the hardware thread from the cpu core that each ran on in a variable and then write that information to the output file. 
 
 If you like, you may look at the code by doing:
-```
-vi hello_mpi-omp.c
 
 ```
-To close the file from vi do "esc". ":q". 
+vi hello_mpi-omp.c
+```
+To close the file from vi do `esc`, followed by `:q`. 
 
 In real HPC applications, MPI tasks and OpenMP processes are used to organize the parallel solving of math, such as matrix algebra, or to distribute data. MPI is used to share work between nodes, though it can also be used to share work between processors on the same node, while OpenMP designed exclusively to share work between the processors of a single node. Using both these programming models together helps programmers optimize parallel performance of their codes, and they are just two of the several parallel programming models available to coders. 
 
 The output of hello_mpi_omp should look like this:
+
 ```
 MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
 
-| MPI taskID| OpenMP process ID| Hardware Thead ID |  Node ID          |
-| MPI 000   | OMP 000          | HWT 001           |  Node frontier035 |
+| MPI TaskID| OpenMP process ID| Hardware Thread ID | Node ID                  |
+| MPI 000      | OMP 000                  | HWT 001                     | Node frontier035 |
 
-This means MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
+This means that MPI task 000 and OpenMP process 000 ran on hardware thread 001 on node 35. 
 
-Remember, the example's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with 1 MPI task per core and 1 OpenMP process. 
+Remember, the example's srun was setup for 1 node (-N 1), 1 MPI task (-n 1), with one core for each MPI task (-c 1) and 1 OpenMP process (export OMP_NUM_THREADS=1) .
+
 ```
+export OMP_NUM_THREADS=1
+
 srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
 
 To see if you got the same result from your job, do: 
-
 
 ```
 ls
@@ -225,13 +229,12 @@ If you don't see output that looks like,
 ```
 MPI 000 - OMP 000 - HWT 001 - Node frontier035
 ```
-Retrace your steps or ask for help from the instructors. 
+retrace your steps or ask for help from the instructors. 
 
 
 Multiple MPI Tasks Exercise 
 -------------------
 OK now let’s run with 7 MPI tasks. 
-
 
 Here is what we have learned about srun so far: 
 
@@ -248,7 +251,10 @@ srun -N 1 -n 1 -c 1 ./hello_mpi_omp
 ```
 Which option would you set to `7` to get 7 MPI tasks per node? 
 
-Open your submit.sl with `vi` or your favored text editor and make the change. Then submit your job with `sbatch submit.sl. 
+Open your submit.sl with `vi` or your favored text editor and make the change. 
+
+Then submit your job with `sbatch submit.sl. 
+
 When your job is done, open the output file (looks like a variation of srun_myjob-397453.out) with 'vi' or a text editor. Does it look like this? :
 
 ```
@@ -275,7 +281,7 @@ export OMP_NUM_THREADS=1
 ```
 In this case it is asking for one OpenMP process per task. 
 
-Open submit.sl and change that line so you now have two OpenMP process per task. 
+Edit submit.sl to change that line so you have two OpenMP process per task. 
 
 How many CPU cores are available to each of your MPI tasks? Do you think your cores will be able to handle the load with two processes each? 
 
@@ -298,7 +304,7 @@ MPI 003 - OMP 000 - HWT 025 - Node frontier139
 MPI 003 - OMP 001 - HWT 025 - Node frontier139
 .  .  .    
 ```
-The CPU's cores could easily handle two processes each, in fact, the Frontier cores have two hardware threads each, but the default slrum setting on Frontier is to only schedule one hardware thread per core. This allows each process to have all the resoruces of the core. So, in the way we have submitted the job, each hardware thread had two processes. That is not an ideal situation because the thread would need to wait for one process to finish before it could start running the other, that is called oversubscription and the reason for the warnings in my example output. 
+The CPU's cores could easily handle two processes each, in fact, the Frontier cores have two hardware threads each, but the default slrum setting on Frontier is to only schedule one hardware thread per core. This allows each process to have all the resources of the core. So, in the way we have submitted the job, each hardware thread had to handle two processes. You can see this in the example output by the fact that every two OMP processes share one HWT. That is not an ideal situation because the thread would need to wait for one process to finish before it could start running the other. That situation is called oversubscription and the reason for the warnings in my example output. 
 
 A better plan is to reserve a core for each process in the MPI task. What would you need to change about your current srun line, in submit.sl, to get a core reserved for each process in each MPI task? 
 
@@ -310,21 +316,21 @@ Remember:
 | c      | number of CPU cores per task |
 
 
-Make that change and submit the job again. Check your output to see if the warning is gone and if each OMP process has a unque HWT nubmer. 
+Make that change and submit the job again. Check your output to see if the warning is gone and if each OMP process has a unique HWT ID number associated with it in the output. 
 
 
 Putting It All Together Exercise
 --------------------------------
 
-You can see that with just a few of the possible Srun options, we have a lot of control at the runtime of our program over how its work layed out on the node! 
+You can see that with just a few of the possible srun options, we have a lot of control at the runtime of our program over how its work is laid out on the node! 
 
 For your final exercise in the challenge, see if you can setup and run the following job layouts for hello_mpi_omp without getting errors. Check your output.  
 
 1.)  2 MPI tasks with 3 OpenMP processes each, on one node. (Your output file should have 6 lines) 
 2.)  8 MPI tasks with 4 OpenMP processes each, on one node. (Your output file should have 32 lines) 
 
-When you are done, copy the path to either one of those output files to the google sheet to show that you have done the exercise.
+When you are done, copy the path to one of those output files to the google sheet to show that you have done the exercise.
 
+In summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler. We explored a few of the srun options that control how the parallel job launcher lays out work on the node.  
 
-So in summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler and we explored a few of the srun options that control how the parallel job launcher lays out work on the node.  If you want to learn more, see the Frontier User Documentation's Slurm section, where there are many more examples: (https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm)[https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm]
-
+If you want to learn more, see the Frontier User Documentation's Slurm section, where there are many more examples: (https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm)[https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm]
