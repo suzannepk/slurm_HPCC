@@ -14,4 +14,4 @@
 export OMP_NUM_THREADS=1
 
 # jsrun command to modify (see key above for flags)
-srun -N 1 -n 1 -c 1 -gpus 1
+srun -N 1 -n 1 -c 1 -gpus 1 | sort
