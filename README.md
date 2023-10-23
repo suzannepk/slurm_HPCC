@@ -169,7 +169,7 @@ Below is a picture of the Frontier compute node.
 </center>
 <br>
 
-The Blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which enable them to do streams of 1000s of independent operations. 
+The blue portion of the pictured node is the CPU. You can see that it has several rows of cores each represented by a small blue box. Each core has two hardware threads, labeled with numbers. Each thread can do an independent task.  The red boxes to the right are the GPUs, we will not talk about scheduling them in this tutorial, but the reason that they are part of most modern supercomputers is that they each have thousands of channels which enable them to do streams of 1000s of independent operations. 
 
  If you are running this tutorial on a different computer, the details of the node may look a little different, but the basic elements of cores and hardware threads will be similar for the CPU.   
 
