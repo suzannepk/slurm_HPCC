@@ -298,50 +298,33 @@ MPI 003 - OMP 000 - HWT 025 - Node frontier139
 MPI 003 - OMP 001 - HWT 025 - Node frontier139
 .  .  .    
 ```
-The CPU's cores could easily handle two processes each, but that is not an ideal situation because the core would need to wait for one process to finish before it could start running the other, that is called oversubscription and the reason for the warning in my example output. 
+The CPU's cores could easily handle two processes each, in fact, the Frontier cores have two hardware threads each, but the default slrum setting on Frontier is to only schedule one hardware thread per core. This allows each process to have all the resoruces of the core. So, in the way we have submitted the job, each hardware thread had two processes. That is not an ideal situation because the thread would need to wait for one process to finish before it could start running the other, that is called oversubscription and the reason for the warnings in my example output. 
 
-A better plan is to reserve a core for each process. What would you need to change about your current srun line, in submit.sl, to get a core reserved for each process in each MPI task? 
+A better plan is to reserve a core for each process in the MPI task. What would you need to change about your current srun line, in submit.sl, to get a core reserved for each process in each MPI task? 
 
-Make that change and submit the job again. Check your output to see if the warning is gone. 
+Remember: 
+| Options| Meaning                      |
+| :---   |:-----                        |
+| N      | Number of Nodes              |
+| n      | MPI tasks per node           |
+| c      | number of CPU cores per task |
+
+
+Make that change and submit the job again. Check your output to see if the warning is gone and if each OMP process has a unque HWT nubmer. 
 
 
 Putting It All Together Exercise
 --------------------------------
 
-You can see that with just a few of the possible Srun options that we have a lot of control at the run time of our program over how its work in done in parallel on the node! 
+You can see that with just a few of the possible Srun options, we have a lot of control at the runtime of our program over how its work layed out on the node! 
 
 For your final exercise in the challenge, see if you can setup and run the following job layouts for hello_mpi_omp without getting errors. Check your output.  
 
-1.)  2 MPI tasks with 3 OpenMP processes each on one node. (Your output file should have 6 lines) 
-2.)  8 MPI tasks with 4 OpenMP processes each on one node. (Your output file should have 32 lines) 
+1.)  2 MPI tasks with 3 OpenMP processes each, on one node. (Your output file should have 6 lines) 
+2.)  8 MPI tasks with 4 OpenMP processes each, on one node. (Your output file should have 32 lines) 
 
 When you are done, copy the path to either one of those output files to the google sheet to show that you have done the exercise.
 
 
-So in summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler and we explored srun options that control how to parallel job launcher lays out work on the node.  If you want to learn more see the Frontier User Documentation's Slurm section, where there are many more examples: https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm 
-
-
-Common Slurm Options
---------------------
-
-The table below summarizes options for submitted jobs. Unless otherwise noted, they can be used for either batch scripts or interactive batch jobs. For scripts, they can be added on the ``sbatch`` command line or as a ``#BSUB`` directive in the batch script. (If they're specified in both places, the command line takes precedence.) This is only a subset of all available options. Check the `Slurm Man Pages <https://slurm.schedmd.com/man_index.html>`__ for a more complete list.
-
-
-| Option                 | Example Usage                              | Description                                                                          |
-|:------                 |:--------------                             |:-----------                                                                          |          
-| ``-A``                 | ``#SBATCH -A ABC123``                      | Specifies the project to which the job should be charged                             |
-| ``-N``                 | ``#SBATCH -N 1024``                        | Request 1024 nodes for the job                                                       |
-| ``-t``                 | ``#SBATCH -t 4:00:00``                     | Request a walltime of 4 hours. <br> Walltime requests can be specified as minutes, hours:minutes, hours:minuts:seconds <br> days-hours, days-hours:minutes, or days-hours:minutes:seconds |                                  
-| ``--threads-per-core`` | ``#SBATCH --threads-per-core=2``           | Number of active hardware threads per core. Can be 1 or 2 (1 is default)<br> **Must** be used if using ``--threads-per-core=2`` in your ``srun`` command.|
-| ``-J``                 | ``#SBATCH -J MyJob123``                    | Specify the job name (this will show up in queue listings)                           |
-| ``-o``                 | ``#SBATCH -o jobout.%j``                   | File where job STDOUT will be directed (%j will be replaced with the job ID).        |
-|                        |                                            | If no `-e` option is specified, job STDERR will be placed in this file, too.         |
-| ``-e``                 | ``#SBATCH -e joberr.%j``                   | File where job STDERR will be directed (%j will be replaced with the job ID).        |
-|                        |                                            | If no `-o` option is specified, job STDOUT will be placed in this file, too.         |
-| ``--mail-type``        | ``#SBATCH --mail-type=END``                | Send email for certain job actions. Can be a comma-separated list. Actions include <br>  BEGIN, END, FAIL, REQUEUE, INVALID_DEPEND, STAGE_OUT, ALL, and more.|
-| ``--mail-user``        | ``#SBATCH --mail-user=user@somewhere.com`` | Email address to be used for notifications.                                          |
-| ``--reservation``      | ``#SBATCH --reservation=MyReservation.1``  | Instructs Slurm to run a job on nodes that are part of the specified reservation.    |
-
-
-Many other states and job reason codes exist. For a more complete description, see the ``squeue`` man page (either on the system or online).
+So in summary, we explored the Slurm options for sbatch that allow us to reserve compute nodes via the scheduler and we explored a few of the srun options that control how the parallel job launcher lays out work on the node.  If you want to learn more, see the Frontier User Documentation's Slurm section, where there are many more examples: (https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm)[https://docs.olcf.ornl.gov/systems/frontier_user_guide.html#slurm]
 
