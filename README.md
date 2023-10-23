@@ -59,9 +59,9 @@ Batch Scripts
 -------------
 The most common way to interact with the batch system is via batch scripts. A batch script is simply a shell script with added directives to request various resources from or provide certain information to the scheduling system.  Aside from these directives, the batch script is simply the series of commands needed to set up and run your job.
 
-To submit a batch script, use the command ``sbatch submit.sl``
+To submit a batch script, use the command ``sbatch submit.sl``, but don't do that just yet, because you will need to customize the example batch script, `submit.sl` first. 
 
-Consider the following batch script:
+The example batch script, `submit.sl` looks like this :
 
 ```
 #!/bin/bash
@@ -100,19 +100,21 @@ In the script, Slurm directives are preceded by ``#SBATCH``, making them appear 
 |   13 | Run the job ( add layout details )                                                              |
 
 
-We will modify a simple batch script now to give you practice. 
+We will modify your copy of this batch script now to give you practice. 
 Open the batch script with vi (or your favored text editor). To use Vi do the following:
 
 ```
 vi submit.sl
 
-```
-Use "esc", ":i" to put vi in insert mode, use the explainations in the example above to make the following modifications to the batch script. 
+Hit  `esc`, and then type `i` to put vi in insert mode, use the explanations in the example above to make the following modifications to the batch script. 
 1. Change the project to the project ID for this tutorial.
 2. Customize your job's name.
 3. Change the time from 10 minutes to 8 minutes.
 
-Submit the batch script to run by doing: 
+When you are finished, come out of insert mode by hitting `esc` then type `:wq` and hit `return` to save your file and quit vi.  
+
+Submit the batch script to run by doing:
+
 
 ```
 sbatch submit.sl
