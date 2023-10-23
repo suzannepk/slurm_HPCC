@@ -14,7 +14,7 @@ Frontier uses SchedMD's Slurm Workload Manager for scheduling and managing jobs.
 
 Slurm documentation for each command is available via the ``man`` utility, and on the web at `<https://slurm.schedmd.com/man_index.html>`__. Additional documentation is available at `<https://slurm.schedmd.com/documentation.html>`__.
 
-Some common Slurm commands are summarized in the table below. More complete examples are given in the Monitoring and Modifying Batch Jobs section of this guide.
+Some common Slurm commands are summarized in the table below. 
 
 
 | Command      | Action/Task                                    | 
